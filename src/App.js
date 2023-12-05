@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+// import { Fragment } from 'react';
+// import Counter from './components/Counter';
+// import Header from './components/Header';
+// import Auth from './components/Auth'
+import { LandingPage } from './landing/LandingPage';
+import { CalendarPage, loader as calendarsLoader } from './calendar/CalendarPage';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import RootLayout from './components/RootLayout';
+import ErrorPage from './components/ErrorPage';
+import CalendarDetails, {loader as calendarLoader} from './calendar/CalendarDetails';
+
+const router = createBrowserRouter([
+  {
+    path:'/', 
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {index: true, element: <LandingPage />},
+      {path: '/calendar', 
+      children: [
+        {index: true, element: <CalendarPage />, loader: calendarsLoader},
+        {path: ':calendarId', element: <CalendarDetails />, loader: calendarLoader},
+      ]
+      },
+    ]
+  },
+]);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <RouterProvider router={router}/>;
 }
 
 export default App;
